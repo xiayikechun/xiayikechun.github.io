@@ -35,7 +35,7 @@ jobs:
         REPO: github.com/xiayikechun/xiayikechun.github.io
         GH_TOKEN: ${{ secrets.HEXO_TOKEN }}     # can be created or changed in the Github/Repository/Setting/Secrets/Actions
       run: |
-        cd ./public && echo cloudwind.tech > CNAME && git init && git add .
+        cd ./public && echo lizihang.eu.org > CNAME && git init && git add .
         git config --global user.name $GIT_NAME
         git config --global user.email $GIT_EMAIL
         git commit -m "Site deployed by GitHub Actions"
