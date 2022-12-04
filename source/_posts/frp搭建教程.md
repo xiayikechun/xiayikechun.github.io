@@ -1,3 +1,5 @@
+title : frp搭建教程
+
 ## 1.  下载frp程序
 [Frp开源地址](https://github.com/fatedier/frp/releases)
 注意选择对应的系统版本
