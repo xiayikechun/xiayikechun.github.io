@@ -1,32 +1,43 @@
-name: Pages
+name: Deployment
 
 on:
-  push:
-    branches:
-      - master # default branch
+push:
+    branches: [hexo] # only push events on source branch trigger deployment
 
 jobs:
-  pages:
+hexo-deployment:
     runs-on: ubuntu-latest
+    env:
+    TZ: Asia/Shanghai
+
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js 19.x
-        uses: actions/setup-node@v2
-        with:
-          node-version: "19"
-      - name: Cache NPM dependencies
-        uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: ${{ runner.OS }}-npm-cache
-          restore-keys: |
-            ${{ runner.OS }}-npm-cache
-      - name: Install Dependencies
-        run: npm install
-      - name: Build
-        run: npm run build
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.HEXO_TOKEN }}
-          publish_dir: ./public
+    - name: Checkout source
+    uses: actions/checkout@v2
+    with:
+        submodules: true
+
+    - name: Setup Node.js
+    uses: actions/setup-node@v1
+    with:
+        node-version: '12.x'
+
+    - name: Install dependencies & Generate static files
+    run: |
+        node -v
+        npm i -g hexo-cli
+        npm i
+        hexo clean
+        hexo g
+
+    - name: Deploy to Github Pages
+    env:
+        GIT_NAME: xiayikechun
+        GIT_EMAIL: 1581487515@qq.com
+        REPO: github.com/xiayikechun/xiayikechun.github.io
+        GH_TOKEN: ${{ secrets.HEXO_TOKEN }}    # can be created or changed in the Github/Repository/Setting/Secrets/Actions
+    run: |
+        cd ./public && echo cloudwind.tech > CNAME && git init && git add .
+        git config --global user.name $GIT_NAME
+        git config --global user.email $GIT_EMAIL
+        git commit -m "Site deployed by GitHub Actions"
+        git push --force --quiet "https://$GH_TOKEN@$REPO" master:master
