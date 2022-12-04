@@ -1,66 +1,36 @@
-name: CI
+name: Pages
 
 on:
   push:
     branches:
-      - master
-
-env:
-  GIT_USER: xiayikechun
-  GIT_EMAIL: 1581487515@qq.com
-  THEME_REPO: xiayikechun/xiayikechun.github.io
-  THEME_BRANCH: zhuti
-  DEPLOY_REPO: xiayikechun/xiayikechun.github.io
-  DEPLOY_BRANCH: hexo
+      - master  # default branch
 
 jobs:
-  build:
-    name: Build on node ${{ matrix.node_version }} and ${{ matrix.os }}
+  pages:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        node_version: [19.X]
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Checkout theme repo
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
-          repository: ${{ env.THEME_REPO }}
-          ref: ${{ env.THEME_BRANCH }}
-          path: themes/concise
-
-      - name: Checkout deploy repo
-        uses: actions/checkout@v2
+          token: ${{ secrets.HEXO_TOKEN }}
+          # If your repository depends on submodule, please see: https://github.com/actions/checkout
+          submodules: recursive
+      - name: Use Node.js 19.x
+        uses: actions/setup-node@v2
         with:
-          repository: ${{ env.DEPLOY_REPO }}
-          ref: ${{ env.DEPLOY_BRANCH }}
-          path: .deploy_git
-
-      - name: Use Node.js ${{ matrix.node_version }}
-        uses: actions/setup-node@v1
+          node-version: '19'
+      - name: Cache NPM dependencies
+        uses: actions/cache@v2
         with:
-          node-version: ${{ matrix.node_version }}
-
-      - name: Configuration environment
-        env:
-          HEXO_DEPLOY_PRI: ${{secrets.HEXO_DEPLOY_PRI}}
-        run: |
-          sudo timedatectl set-timezone "Asia/Shanghai"
-          mkdir -p ~/.ssh/
-          echo "$HEXO_DEPLOY_PRI" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-          git config --global user.name $GIT_USER
-          git config --global user.email $GIT_EMAIL
-
-      - name: Install dependencies
-        run: |
-          npm install
-
-      - name: Deploy hexo
-        run: |
-          npm run deploy
+          path: node_modules
+          key: ${{ runner.OS }}-npm-cache
+          restore-keys: |
+            ${{ runner.OS }}-npm-cache
+      - name: Install Dependencies
+        run: npm install
+      - name: Build
+        run: npm run build
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.HEXO_TOKEN }}
+          publish_dir: ./public
