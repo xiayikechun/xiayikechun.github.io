@@ -1,41 +1,40 @@
 name: Deployment
 
 on:
-push:
+  push:
     branches: [hexo] # only push events on source branch trigger deployment
 
 jobs:
-hexo-deployment:
+  hexo-deployment:
     runs-on: ubuntu-latest
     env:
-    TZ: Asia/Shanghai
+      TZ: Asia/Shanghai
 
     steps:
     - name: Checkout source
-    uses: actions/checkout@v2
-    with:
+      uses: actions/checkout@v2
+      with:
         submodules: true
 
     - name: Setup Node.js
-    uses: actions/setup-node@v1
-    with:
+      uses: actions/setup-node@v1
+      with:
         node-version: '12.x'
 
     - name: Install dependencies & Generate static files
-    run: |
+      run: |
         node -v
         npm i -g hexo-cli
         npm i
         hexo clean
         hexo g
-
     - name: Deploy to Github Pages
-    env:
+      env:
         GIT_NAME: xiayikechun
         GIT_EMAIL: 1581487515@qq.com
         REPO: github.com/xiayikechun/xiayikechun.github.io
-        GH_TOKEN: ${{ secrets.HEXO_TOKEN }}    # can be created or changed in the Github/Repository/Setting/Secrets/Actions
-    run: |
+        GH_TOKEN: ${{ secrets.HEXO_TOKEN }}     # can be created or changed in the Github/Repository/Setting/Secrets/Actions
+      run: |
         cd ./public && echo cloudwind.tech > CNAME && git init && git add .
         git config --global user.name $GIT_NAME
         git config --global user.email $GIT_EMAIL
