@@ -1,7 +1,6 @@
 ---
-title: categories
+title: FRP搭建教程
 date: 2022-12-01 18:25:30
-layout: "post"
 ---
 
 ## 1.  下载frp程序
