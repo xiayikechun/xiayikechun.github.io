@@ -1,3 +1,9 @@
+---
+title: categories
+date: 2022-12-01 18:25:30
+layout: "post"
+---
+
 ## 1.  下载frp程序
 
 [Frp开源地址](https://github.com/fatedier/frp/releases)
