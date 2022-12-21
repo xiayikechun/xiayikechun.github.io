@@ -131,4 +131,4 @@ theme: hexo-theme-matery
 deploy:
   type: git
   repo: git@github.com:xiayikechun/xiayikechun.github.io.git
-  branch: mastet
+  branch: master
