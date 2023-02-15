@@ -1,8 +1,11 @@
 ---
-title: FRP搭建教程
+title: FRP搭建教程纯手动
 date: 2022-12-01 18:25:30
 ---
 
+
+＃ 已更新新方法可以参考
+[链接地址](https://github.com/fatedier/frp/releases)
 ## 1.  下载frp程序
 
 [Frp开源地址](https://github.com/fatedier/frp/releases)
