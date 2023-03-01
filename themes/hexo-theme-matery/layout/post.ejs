@@ -14,7 +14,7 @@
 <% } %>
 
 <%- partial('_partial/post-cover') %>
-
+<div style="text-align: center "> <a href="https://github.com/xiayikechun/xiayikechun.github.io/edit/hexo/source/<%- page.source %>" target="_blank">编辑文章✏</a> </div>
 <%
     var isTocEnable = theme.toc.enable && String(page.toc) !== 'false';
     var containerClass = isTocEnable ? 'post-container' : 'container';
